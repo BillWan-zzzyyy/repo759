@@ -26,6 +26,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
+  // n is the image size, m is the mask size (m must be odd to have a center)
   const long n_arg = parse_positive(argv[1]);
   const long m_arg = parse_positive(argv[2]);
   if (n_arg == 0 || m_arg == 0 || m_arg % 2 == 0) {
@@ -35,10 +36,12 @@ int main(int argc, char* argv[]) {
   const std::size_t n = static_cast<std::size_t>(n_arg);
   const std::size_t m = static_cast<std::size_t>(m_arg);
 
+  // both matrices are stored in 1D in row-major order
   float* image = new float[n * n];
   float* mask = new float[m * m];
   float* output = new float[n * n];
 
+  // image values in [-10, 10], mask values in [-1, 1]
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<float> image_dist(-10.0f, 10.0f);
@@ -51,15 +54,18 @@ int main(int argc, char* argv[]) {
     mask[i] = mask_dist(gen);
   }
 
+  // only the convolution itself is timed
   high_resolution_clock::time_point start = high_resolution_clock::now();
   convolve(image, output, n, mask, m);
   high_resolution_clock::time_point stop = high_resolution_clock::now();
   duration<double, std::milli> elapsed = stop - start;
 
+  // time in ms, then the first and last element of the result
   std::cout << elapsed.count() << "\n";
   std::cout << output[0] << "\n";
   std::cout << output[n * n - 1] << "\n";
 
+  // free everything with delete[] as the task asks
   delete[] image;
   delete[] mask;
   delete[] output;

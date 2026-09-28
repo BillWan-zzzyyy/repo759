@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
+  // read n and make sure it is a positive integer
   char* end = nullptr;
   errno = 0;
   const long parsed = std::strtol(argv[1], &end, 10);
@@ -27,6 +28,7 @@ int main(int argc, char* argv[]) {
   float* arr = new float[n];
   float* output = new float[n];
 
+  // fill the input with random floats in [-1, 1]
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
@@ -34,15 +36,18 @@ int main(int argc, char* argv[]) {
     arr[i] = dist(gen);
   }
 
+  // only the scan call is timed, not the random number generation
   high_resolution_clock::time_point start = high_resolution_clock::now();
   scan(arr, output, n);
   high_resolution_clock::time_point stop = high_resolution_clock::now();
   duration<double, std::milli> elapsed = stop - start;
 
+  // time in ms, then the first and last element of the scanned array
   std::cout << elapsed.count() << "\n";
   std::cout << output[0] << "\n";
   std::cout << output[n - 1] << "\n";
 
+  // free the arrays allocated with new[]
   delete[] arr;
   delete[] output;
 
