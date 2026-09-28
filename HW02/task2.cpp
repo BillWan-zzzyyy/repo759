@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  // n is the image size, m is the mask size (m must be odd to have a center)
+  // n is the image size, m is the mask size
   const long n_arg = parse_positive(argv[1]);
   const long m_arg = parse_positive(argv[2]);
   if (n_arg == 0 || m_arg == 0 || m_arg % 2 == 0) {
@@ -65,7 +65,6 @@ int main(int argc, char* argv[]) {
   std::cout << output[0] << "\n";
   std::cout << output[n * n - 1] << "\n";
 
-  // free everything with delete[] as the task asks
   delete[] image;
   delete[] mask;
   delete[] output;

@@ -4,8 +4,6 @@
 
 // C has to start from zero since every version only does C += A * B.
 
-// mmul1: loop order (i, j, k). The inner loop is the dot product of row i
-// of A and column j of B, so B is read with a stride of n.
 void mmul1(const double* A, const double* B, double* C, const unsigned int n) {
   std::fill(C, C + n * n, 0.0);
   for (unsigned int i = 0; i < n; ++i) {
